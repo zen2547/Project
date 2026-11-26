@@ -29,16 +29,46 @@ model User {
 
 // ─── catalogue ───────────────────────────────────────────────────────────────
 
-// The chips on a Movie page. The `movies` relation is added with Movie (Task 9).
+enum Certification {
+  G
+  PG
+  PG_13
+  R
+  NC_17
+  NOT_RATED
+}
+
+model Movie {
+  id             Int           @id @default(autoincrement())
+  title          String
+  releaseYear    Int
+  certification  Certification @default(NOT_RATED)
+  runtimeMinutes Int?
+  synopsis       String?
+  posterUrl      String? // https only (checked by the API)
+  // Community Rating. Owned by the reviews module (Task 17); never written
+  // through the catalogue API.
+  ratingAvg      Decimal?      @db.Decimal(3, 1)
+  reviewCount    Int           @default(0)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  genres         Genre[]
+  keywords       Keyword[]
+}
+
+// The chips on a Movie page. Many-to-many with Movie: deleting a Genre or
+// Keyword only removes it from Movies, never the Movies themselves.
 // Names are trimmed by the API; uniqueness is exact (case-sensitive).
 model Genre {
-  id   Int    @id @default(autoincrement())
-  name String @unique
+  id     Int     @id @default(autoincrement())
+  name   String  @unique
+  movies Movie[]
 }
 
 model Keyword {
-  id   Int    @id @default(autoincrement())
-  name String @unique
+  id     Int     @id @default(autoincrement())
+  name   String  @unique
+  movies Movie[]
 }
 
 // Where to watch (Netflix, Disney+ …). Links to Movies arrive in Task 13.

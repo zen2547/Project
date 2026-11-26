@@ -118,13 +118,13 @@ Plan: [plan.md](./plan.md). Every task: `pnpm lint && pnpm test && pnpm test:e2e
 **Files:** `prisma/schema.prisma`, `src/catalogue/streaming-services/*`, `test/streaming.e2e-spec.ts`
 **Scope:** S
 
-### Task 9: Admin creates/edits/deletes a Movie; anyone can view it
+### Task 9: Admin creates/edits/deletes a Movie; anyone can view it ✅
 **Description:** `Movie` model (incl. `ratingAvg`, `reviewCount`, Certification enum) with Genre/Keyword relations; Admin POST/PATCH/DELETE `/movies`; public `GET /movies/:id` returning the core fields, `genres`, `keywords` and `communityRating: null`.
 
 **Acceptance criteria:**
-- [ ] `genreIds`/`keywordIds` replace the whole set; unknown ids → 400 naming them
-- [ ] Validation rules (year range, runtime range, https URLs) → 400; `ratingAvg`/`reviewCount` in a body are rejected
-- [ ] Unknown id → 404; deleting a Movie leaves its Genres and Keywords
+- [x] `genreIds`/`keywordIds` replace the whole set; unknown ids → 400 naming them
+- [x] Validation rules (year range, runtime range, https URLs) → 400; `ratingAvg`/`reviewCount` in a body are rejected
+- [x] Unknown id → 404; deleting a Movie leaves its Genres and Keywords
 
 **Verification:** `pnpm test:e2e -- movies`
 **Dependencies:** 7

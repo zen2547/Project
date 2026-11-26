@@ -8,16 +8,22 @@ import { KeywordsRepository } from './keywords/keywords.repository.js';
 import { StreamingServicesController } from './streaming-services/streaming-services.controller.js';
 import { StreamingServicesService } from './streaming-services/streaming-services.service.js';
 import { StreamingServicesRepository } from './streaming-services/streaming-services.repository.js';
+import { MoviesController } from './movies/movies.controller.js';
+import { MoviesService } from './movies/movies.service.js';
+import { MoviesRepository } from './movies/movies.repository.js';
 
-// Everything a Movie page shows. Movies and People join this module in
-// Tasks 9–13.
+// Everything a Movie page shows. People, Credits and media join this module
+// in Tasks 11–13.
 @Module({
   controllers: [
+    MoviesController,
     GenresController,
     KeywordsController,
     StreamingServicesController,
   ],
   providers: [
+    MoviesService,
+    MoviesRepository,
     GenresService,
     GenresRepository,
     KeywordsService,
