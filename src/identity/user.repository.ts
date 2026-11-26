@@ -1,16 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service.js';
 import type { User } from '../prisma/generated/prisma/client.js';
-import { PrismaClientKnownRequestError } from '../prisma/generated/prisma/internal/prismaNamespace.js';
+import { isUniqueViolation } from '../prisma/prisma-errors.js';
 
 export type CreateUserData = {
   email: string;
   passwordHash: string;
   displayName: string;
 };
-
-// Prisma error code for "unique constraint failed".
-const UNIQUE_VIOLATION = 'P2002';
 
 @Injectable()
 export class UserRepository {
@@ -29,12 +26,7 @@ export class UserRepository {
     try {
       return await this.prisma.user.create({ data });
     } catch (error) {
-      if (
-        error instanceof PrismaClientKnownRequestError &&
-        error.code === UNIQUE_VIOLATION
-      ) {
-        return null;
-      }
+      if (isUniqueViolation(error)) return null;
       throw error;
     }
   }

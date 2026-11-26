@@ -26,3 +26,17 @@ model User {
   role         Role     @default(MEMBER)
   createdAt    DateTime @default(now())
 }
+
+// ─── catalogue ───────────────────────────────────────────────────────────────
+
+// The chips on a Movie page. The `movies` relation is added with Movie (Task 9).
+// Names are trimmed by the API; uniqueness is exact (case-sensitive).
+model Genre {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+}
+
+model Keyword {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+}

@@ -95,12 +95,12 @@ Plan: [plan.md](./plan.md). Every task: `pnpm lint && pnpm test && pnpm test:e2e
 
 ## Phase 3: catalogue — [SPEC-catalogue.md](../SPEC-catalogue.md)
 
-### Task 7: Admin manages Genres and Keywords
+### Task 7: Admin manages Genres and Keywords ✅
 **Description:** `Genre` and `Keyword` models; public `GET /genres`, `GET /keywords` (sorted by name); Admin POST/PATCH/DELETE for both.
 
 **Acceptance criteria:**
-- [ ] CRUD works for Admin; Member → 403; no token on writes → 401
-- [ ] Duplicate name → 409; unknown id → 404
+- [x] CRUD works for Admin; Member → 403; no token on writes → 401
+- [x] Duplicate name → 409; unknown id → 404
 
 **Verification:** `pnpm test:e2e -- taxonomy`
 **Dependencies:** 6
