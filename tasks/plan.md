@@ -39,7 +39,7 @@ Build the V1 backend in `C:\Dev Nest\Imdb-web` as a fresh NestJS 12 + Prisma 7 +
 
 ### Phase 3: catalogue
 - [x] Task 7: Admin manages Genres and Keywords
-- [ ] Task 8: Admin manages Streaming Services
+- [x] Task 8: Admin manages Streaming Services
 - [ ] Task 9: Admin creates/edits/deletes a Movie; anyone can view it
 - [ ] Task 10: Anyone can browse Movies (search, filter, sort, paginate)
 - [ ] Task 11: Admin manages People; anyone can see a filmography

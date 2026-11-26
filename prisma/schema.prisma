@@ -40,3 +40,10 @@ model Keyword {
   id   Int    @id @default(autoincrement())
   name String @unique
 }
+
+// Where to watch (Netflix, Disney+ …). Links to Movies arrive in Task 13.
+model StreamingService {
+  id      Int     @id @default(autoincrement())
+  name    String  @unique
+  logoUrl String? // https only (checked by the API)
+}

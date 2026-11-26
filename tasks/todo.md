@@ -107,11 +107,11 @@ Plan: [plan.md](./plan.md). Every task: `pnpm lint && pnpm test && pnpm test:e2e
 **Files:** `prisma/schema.prisma`, `src/catalogue/genres/*`, `src/catalogue/keywords/*`, `test/taxonomy.e2e-spec.ts`
 **Scope:** M
 
-### Task 8: Admin manages Streaming Services
+### Task 8: Admin manages Streaming Services ✅
 **Description:** `StreamingService` model; public list; Admin CRUD.
 
 **Acceptance criteria:**
-- [ ] CRUD + auth rules as in Task 7; duplicate name → 409; non-https `logoUrl` → 400
+- [x] CRUD + auth rules as in Task 7; duplicate name → 409; non-https `logoUrl` → 400
 
 **Verification:** `pnpm test:e2e -- streaming`
 **Dependencies:** 6
