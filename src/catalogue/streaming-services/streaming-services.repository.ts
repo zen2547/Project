@@ -21,6 +21,14 @@ export class StreamingServicesRepository {
     return this.prisma.streamingService.findMany({ orderBy: { name: 'asc' } });
   }
 
+  async exists(id: number): Promise<boolean> {
+    const row = await this.prisma.streamingService.findUnique({
+      where: { id },
+      select: { id: true },
+    });
+    return row !== null;
+  }
+
   async create(data: {
     name: string;
     logoUrl?: string;

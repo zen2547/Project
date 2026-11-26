@@ -30,7 +30,7 @@ psql -U postgres -c "CREATE DATABASE imdb_dev"
 psql -U postgres -c "CREATE DATABASE imdb_test"
 
 pnpm prisma migrate dev   # apply migrations to imdb_dev
-pnpm prisma db seed       # create the Admin from ADMIN_* in .env (safe to re-run)
+pnpm prisma db seed       # Admin from ADMIN_* + 12 real movies (re-run REPLACES the catalogue)
 pnpm start:dev            # http://localhost:3000
 ```
 
@@ -44,6 +44,6 @@ pnpm start:dev            # http://localhost:3000
 | `pnpm test` | Unit tests (`src/**/*.spec.ts`) |
 | `pnpm format` | Prettier |
 | `pnpm prisma migrate dev` | Create/apply migrations on `imdb_dev` |
-| `pnpm prisma db seed` | Upsert the Admin from `.env` (more mock data in later tasks) |
+| `pnpm prisma db seed` | Upsert the Admin from `.env` and replace the catalogue with 12 real Movies (People, Credits, trailers, streaming links). Members are kept |
 | `pnpm test:e2e` | E2E tests against `imdb_test` (refuses any DB not named `*_test`) |
 | `pnpm prisma generate` | Regenerate the Prisma client into `src/prisma/generated` |

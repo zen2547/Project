@@ -4,12 +4,24 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { MoviesRepository } from './movies.repository.js';
-import { toMoviePage, type MoviePage } from './movie-page.js';
+import {
+  toMovieListItem,
+  toMoviePage,
+  type MovieListItem,
+  type MoviePage,
+} from './movie-page.js';
+import { toPage, type Page } from '../../common/pagination.js';
 import type { CreateMovieDto, UpdateMovieDto } from './dto/movie.dto.js';
+import type { ListMoviesQuery } from './dto/list-movies.dto.js';
 
 @Injectable()
 export class MoviesService {
   constructor(private readonly movies: MoviesRepository) {}
+
+  async list(query: ListMoviesQuery): Promise<Page<MovieListItem>> {
+    const { rows, total } = await this.movies.list(query);
+    return toPage(rows.map(toMovieListItem), total, query);
+  }
 
   async getPage(id: number): Promise<MoviePage> {
     const movie = await this.movies.findById(id);

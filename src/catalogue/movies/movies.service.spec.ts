@@ -1,11 +1,8 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { MoviesService } from './movies.service.js';
-import type {
-  MoviesRepository,
-  MovieWithTaxonomy,
-} from './movies.repository.js';
+import type { MoviesRepository, MoviePageRow } from './movies.repository.js';
 
-const inception: MovieWithTaxonomy = {
+const inception: MoviePageRow = {
   id: 1,
   title: 'Inception',
   releaseYear: 2010,
@@ -19,6 +16,10 @@ const inception: MovieWithTaxonomy = {
   updatedAt: new Date('2026-11-26T00:00:00Z'),
   genres: [{ id: 3, name: 'Sci-Fi' }],
   keywords: [],
+  credits: [],
+  trailers: [],
+  photos: [],
+  streamingLinks: [],
 };
 
 describe('MoviesService', () => {

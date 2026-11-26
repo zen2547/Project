@@ -8,6 +8,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { Public } from '../../identity/decorators/public.decorator.js';
 import { Role } from '../../identity/decorators/role.decorator.js';
@@ -19,11 +20,20 @@ import {
   type CreateMovieDto,
   type UpdateMovieDto,
 } from './dto/movie.dto.js';
+import {
+  listMoviesSchema,
+  type ListMoviesQuery,
+} from './dto/list-movies.dto.js';
 
-// GET /movies (browse, search, sort) arrives in Task 10.
 @Controller('movies')
 export class MoviesController {
   constructor(private readonly movies: MoviesService) {}
+
+  @Public()
+  @Get()
+  list(@Query({ schema: listMoviesSchema }) query: ListMoviesQuery) {
+    return this.movies.list(query);
+  }
 
   @Public()
   @Get(':id')

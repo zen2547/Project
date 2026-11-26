@@ -166,14 +166,14 @@ model StreamingLink {
 
 ## Success Criteria
 
-- [ ] A Guest can list, search, filter and sort Movies, and the `meta.total` matches the filter
-- [ ] `sort=rating` puts Movies with no Reviews last, regardless of `order`
-- [ ] `GET /movies/:id` returns every field in the response shape above in **one** request; unknown id → 404
-- [ ] `GET /people/:id` lists that Person's Movies with their Credit role
-- [ ] Every Admin write returns 401 with no token and 403 for a Member
-- [ ] Each rule above has a test (409 duplicates, 400 unknown ids, 400 `character` on a non-CAST credit, 409 deleting a credited Person)
-- [ ] Deleting a Movie removes its children and leaves Genres, Keywords, People and Streaming Services intact
-- [ ] After seeding, `GET /movies` returns 12 Movies, each with at least one Director and one Cast Credit
+- [x] A Guest can list, search, filter and sort Movies, and the `meta.total` matches the filter
+- [x] `sort=rating` puts Movies with no Reviews last, regardless of `order`
+- [x] `GET /movies/:id` returns every field in the response shape above in **one** request; unknown id → 404
+- [x] `GET /people/:id` lists that Person's Movies with their Credit role
+- [x] Every Admin write returns 401 with no token and 403 for a Member
+- [x] Each rule above has a test (409 duplicates, 400 unknown ids, 400 `character` on a non-CAST credit, 409 deleting a credited Person)
+- [x] Deleting a Movie removes its children and leaves Genres, Keywords, People and Streaming Services intact
+- [x] After seeding, `GET /movies` returns 12 Movies, each with at least one Director and one Cast Credit
 
 ## Out of Scope
 

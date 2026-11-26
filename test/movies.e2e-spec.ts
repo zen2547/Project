@@ -102,7 +102,14 @@ describe('catalogue: /movies (e2e)', () => {
         // chips come back sorted by name
         genres: [drama, scifi],
         keywords: [dream, heist],
+        // cast & crew and media are added through their own endpoints
+        directors: [],
+        writers: [],
+        stars: [],
+        trailers: [],
+        photos: [],
         communityRating: null,
+        streamingLinks: [],
       });
 
       const page = await getPage(created.body.id).expect(200);

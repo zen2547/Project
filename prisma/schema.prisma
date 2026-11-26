@@ -39,21 +39,25 @@ enum Certification {
 }
 
 model Movie {
-  id             Int           @id @default(autoincrement())
+  id             Int             @id @default(autoincrement())
   title          String
   releaseYear    Int
-  certification  Certification @default(NOT_RATED)
+  certification  Certification   @default(NOT_RATED)
   runtimeMinutes Int?
   synopsis       String?
   posterUrl      String? // https only (checked by the API)
   // Community Rating. Owned by the reviews module (Task 17); never written
   // through the catalogue API.
-  ratingAvg      Decimal?      @db.Decimal(3, 1)
-  reviewCount    Int           @default(0)
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
+  ratingAvg      Decimal?        @db.Decimal(3, 1)
+  reviewCount    Int             @default(0)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
   genres         Genre[]
   keywords       Keyword[]
+  credits        Credit[]
+  trailers       Trailer[]
+  photos         Photo[]
+  streamingLinks StreamingLink[]
 }
 
 // The chips on a Movie page. Many-to-many with Movie: deleting a Genre or
@@ -71,9 +75,80 @@ model Keyword {
   movies Movie[]
 }
 
-// Where to watch (Netflix, Disney+ …). Links to Movies arrive in Task 13.
+// Where to watch (Netflix, Disney+ …).
 model StreamingService {
-  id      Int     @id @default(autoincrement())
-  name    String  @unique
+  id      Int             @id @default(autoincrement())
+  name    String          @unique
   logoUrl String? // https only (checked by the API)
+  links   StreamingLink[]
+}
+
+// ─── people & credits ───
+
+enum CreditRole {
+  DIRECTOR
+  WRITER
+  CAST
+}
+
+// Anyone in a Movie's cast or crew.
+model Person {
+  id        Int       @id @default(autoincrement())
+  name      String
+  bio       String?
+  photoUrl  String? // https only (checked by the API)
+  birthDate DateTime? @db.Date
+  credits   Credit[]
+
+  @@index([name])
+}
+
+// One Person's job on one Movie. The same Person can direct AND write the
+// same Movie (two Credits), but not hold the same role twice.
+model Credit {
+  id        Int        @id @default(autoincrement())
+  movieId   Int
+  personId  Int
+  role      CreditRole
+  character String? // CAST only
+  order     Int        @default(0) // billing order; lowest first
+  movie     Movie      @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  // Restrict: a Person with Credits can't be deleted (API answers 409).
+  person    Person     @relation(fields: [personId], references: [id], onDelete: Restrict)
+
+  @@unique([movieId, personId, role])
+  @@index([personId])
+}
+
+// ─── movie media ───
+
+model Trailer {
+  id         Int    @id @default(autoincrement())
+  movieId    Int
+  title      String
+  youtubeUrl String // youtube.com or youtu.be, https (checked by the API)
+  movie      Movie  @relation(fields: [movieId], references: [id], onDelete: Cascade)
+
+  @@index([movieId])
+}
+
+model Photo {
+  id      Int     @id @default(autoincrement())
+  movieId Int
+  url     String // https only (checked by the API)
+  caption String?
+  movie   Movie   @relation(fields: [movieId], references: [id], onDelete: Cascade)
+
+  @@index([movieId])
+}
+
+// "Watch on Netflix": at most one link per Movie per Streaming Service.
+model StreamingLink {
+  movieId   Int
+  serviceId Int
+  url       String // https only (checked by the API)
+  movie     Movie            @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  service   StreamingService @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@id([movieId, serviceId])
 }

@@ -41,19 +41,19 @@ Build the V1 backend in `C:\Dev Nest\Imdb-web` as a fresh NestJS 12 + Prisma 7 +
 - [x] Task 7: Admin manages Genres and Keywords
 - [x] Task 8: Admin manages Streaming Services
 - [x] Task 9: Admin creates/edits/deletes a Movie; anyone can view it
-- [ ] Task 10: Anyone can browse Movies (search, filter, sort, paginate)
-- [ ] Task 11: Admin manages People; anyone can see a filmography
-- [ ] Task 12: Admin adds Credits; movie page shows Directors/Writers/Stars
+- [x] Task 10: Anyone can browse Movies (search, filter, sort, paginate)
+- [x] Task 11: Admin manages People; anyone can see a filmography
+- [x] Task 12: Admin adds Credits; movie page shows Directors/Writers/Stars
 
 ### Checkpoint C: catalogue core
-- [ ] All tests green; a Movie with Genres, Keywords and Credits renders from `GET /movies/:id`
+- [x] All tests green; a Movie with Genres, Keywords and Credits renders from `GET /movies/:id`
 
-- [ ] Task 13: Trailers, Photos and Streaming Links on a Movie
-- [ ] Task 14: Seed 12 real Movies with full page data
+- [x] Task 13: Trailers, Photos and Streaming Links on a Movie
+- [x] Task 14: Seed 12 real Movies with full page data
 
 ### Checkpoint D: catalogue complete
-- [ ] Every SPEC-catalogue success criterion (except rating sort with real reviews) has a passing test
-- [ ] `pnpm prisma db seed` then `GET /movies` → 12 Movies
+- [x] Every SPEC-catalogue success criterion (except rating sort with real reviews) has a passing test
+- [x] `pnpm prisma db seed` then `GET /movies` → 12 Movies
 - [ ] **Review with Palm** before moving on
 
 ### Phase 4: library + reviews

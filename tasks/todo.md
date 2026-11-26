@@ -131,36 +131,36 @@ Plan: [plan.md](./plan.md). Every task: `pnpm lint && pnpm test && pnpm test:e2e
 **Files:** `prisma/schema.prisma`, `src/catalogue/movies/movies.controller.ts`, `src/catalogue/movies/movies.service.ts`, `src/catalogue/movies/movies.repository.ts`, `src/catalogue/movies/dto/*`, `test/movies.e2e-spec.ts`
 **Scope:** M
 
-### Task 10: Anyone can browse Movies
+### Task 10: Anyone can browse Movies ✅
 **Description:** Shared pagination schema + response helper; `GET /movies` with `q`, `genreId`, `keywordId`, `year`, `sort=rating|year|newest`, `order`, `page`, `limit`.
 
 **Acceptance criteria:**
-- [ ] Each filter narrows results and `meta.total` matches; `limit` > 50 → 400
-- [ ] `sort=rating` puts Movies with `ratingAvg = null` last for both `asc` and `desc` (test sets ratings directly in the DB)
+- [x] Each filter narrows results and `meta.total` matches; `limit` > 50 → 400
+- [x] `sort=rating` puts Movies with `ratingAvg = null` last for both `asc` and `desc` (test sets ratings directly in the DB)
 
 **Verification:** `pnpm test:e2e -- movies`
 **Dependencies:** 9
 **Files:** `src/common/pagination.ts`, `src/catalogue/movies/dto/list-movies.dto.ts`, `src/catalogue/movies/movies.repository.ts`, `src/catalogue/movies/movies.controller.ts`, `test/movies-browse.e2e-spec.ts`
 **Scope:** M
 
-### Task 11: Admin manages People; anyone sees a filmography
+### Task 11: Admin manages People; anyone sees a filmography ✅
 **Description:** `Person` + `Credit` models (CreditRole enum); public `GET /people?q=`, `GET /people/:id` with filmography; Admin CRUD on `/people`.
 
 **Acceptance criteria:**
-- [ ] CRUD + auth rules; name search paginates
-- [ ] Deleting a Person who has Credits → 409 (test inserts a Credit directly)
+- [x] CRUD + auth rules; name search paginates
+- [x] Deleting a Person who has Credits → 409 (test inserts a Credit directly)
 
 **Verification:** `pnpm test:e2e -- people`
 **Dependencies:** 9
 **Files:** `prisma/schema.prisma`, `src/catalogue/people/*`, `test/people.e2e-spec.ts`
 **Scope:** M
 
-### Task 12: Admin adds Credits; movie page shows Directors/Writers/Stars
+### Task 12: Admin adds Credits; movie page shows Directors/Writers/Stars ✅
 **Description:** `POST /movies/:id/credits`, `PATCH`/`DELETE /movies/:id/credits/:creditId`; `GET /movies/:id/credits` grouped; `GET /movies/:id` gains `directors`, `writers`, `stars` (top 3 Cast by `order`).
 
 **Acceptance criteria:**
-- [ ] `character` on a non-CAST credit → 400; same Person + Movie + role twice → 409; unknown `personId` → 400
-- [ ] `stars` shows exactly the 3 lowest-`order` Cast Credits; `GET /people/:id` now lists the Movie
+- [x] `character` on a non-CAST credit → 400; same Person + Movie + role twice → 409; unknown `personId` → 400
+- [x] `stars` shows exactly the 3 lowest-`order` Cast Credits; `GET /people/:id` now lists the Movie
 
 **Verification:** `pnpm test:e2e -- credits`
 **Dependencies:** 11
@@ -168,26 +168,26 @@ Plan: [plan.md](./plan.md). Every task: `pnpm lint && pnpm test && pnpm test:e2e
 **Scope:** M
 
 ### Checkpoint C: catalogue core
-- [ ] All tests green; a Movie with Genres, Keywords and Credits renders fully from `GET /movies/:id`
+- [x] All tests green; a Movie with Genres, Keywords and Credits renders fully from `GET /movies/:id`
 
-### Task 13: Trailers, Photos and Streaming Links on a Movie
+### Task 13: Trailers, Photos and Streaming Links on a Movie ✅
 **Description:** `Trailer`, `Photo`, `StreamingLink` models; Admin POST/DELETE trailers and photos; PUT/DELETE streaming links; `GET /movies/:id` gains `trailers`, `photos`, `streamingLinks`.
 
 **Acceptance criteria:**
-- [ ] Non-YouTube `youtubeUrl` → 400; PUT on the same streaming link twice keeps one row with the new URL
-- [ ] Deleting a Movie removes its Credits, Trailers, Photos and Streaming Links but not People or Streaming Services
+- [x] Non-YouTube `youtubeUrl` → 400; PUT on the same streaming link twice keeps one row with the new URL
+- [x] Deleting a Movie removes its Credits, Trailers, Photos and Streaming Links but not People or Streaming Services
 
 **Verification:** `pnpm test:e2e -- movie-media`
 **Dependencies:** 8, 12
 **Files:** `prisma/schema.prisma`, `src/catalogue/movies/media.controller.ts`, `src/catalogue/movies/media.service.ts`, `src/catalogue/movies/movies.repository.ts`, `test/movie-media.e2e-spec.ts`
 **Scope:** M
 
-### Task 14: Seed 12 real Movies with full page data
+### Task 14: Seed 12 real Movies with full page data ✅
 **Description:** Extend `prisma/seed.ts`: Genres, Keywords, Streaming Services, People, and the 12 Movies from the spec with Credits, a Trailer link and Streaming Links. Synopses in our own words; no posters or photos.
 
 **Acceptance criteria:**
-- [ ] After seeding, `GET /movies` → `meta.total = 12`; each Movie has ≥1 Director and ≥1 Cast Credit
-- [ ] Seed is re-runnable
+- [x] After seeding, `GET /movies` → `meta.total = 12`; each Movie has ≥1 Director and ≥1 Cast Credit
+- [x] Seed is re-runnable
 
 **Verification:** `pnpm prisma db seed` twice; spot-check `GET /movies/:id` for 2 Movies
 **Dependencies:** 13
@@ -195,7 +195,7 @@ Plan: [plan.md](./plan.md). Every task: `pnpm lint && pnpm test && pnpm test:e2e
 **Scope:** M
 
 ### Checkpoint D: catalogue complete
-- [ ] SPEC-catalogue success criteria tested and green
+- [x] SPEC-catalogue success criteria tested and green
 - [ ] Review with Palm
 
 ---
