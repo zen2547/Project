@@ -202,60 +202,60 @@ Plan: [plan.md](./plan.md). Every task: `pnpm lint && pnpm test && pnpm test:e2e
 
 ## Phase 4: library + reviews — [SPEC-library.md](../SPEC-library.md), [SPEC-reviews.md](../SPEC-reviews.md)
 
-### Task 15: Member keeps a Watchlist
+### Task 15: Member keeps a Watchlist ✅
 **Description:** `WatchlistItem` model; `GET /me/watchlist`, `PUT`/`DELETE /me/watchlist/:movieId`.
 
 **Acceptance criteria:**
-- [ ] Add → list → remove works; a repeated PUT or DELETE still returns 204
-- [ ] Member A never sees Member B's list; unknown Movie → 404; no token → 401
+- [x] Add → list → remove works; a repeated PUT or DELETE still returns 204
+- [x] Member A never sees Member B's list; unknown Movie → 404; no token → 401
 
 **Verification:** `pnpm test:e2e -- watchlist`
 **Dependencies:** 9
 **Files:** `prisma/schema.prisma`, `src/library/watchlist.controller.ts`, `src/library/library.service.ts`, `src/library/library.repository.ts`, `test/watchlist.e2e-spec.ts`
 **Scope:** M
 
-### Task 16: Member marks Movies Watched
+### Task 16: Member marks Movies Watched ✅
 **Description:** `WatchedEntry` model; `GET /me/watched`, `PUT`/`DELETE /me/watched/:movieId`; export `markWatched(userId, movieId, tx?)` from `LibraryModule` so a caller can pass a transaction.
 
 **Acceptance criteria:**
-- [ ] Same behaviour as Task 15 for Watched; Watched does not remove the Movie from the Watchlist
-- [ ] `markWatched` unit test: works with and without a transaction client
+- [x] Same behaviour as Task 15 for Watched; Watched does not remove the Movie from the Watchlist
+- [x] `markWatched` unit test: works with and without a transaction client
 
 **Verification:** `pnpm test:e2e -- watched`; `pnpm test -- library`
 **Dependencies:** 15
 **Files:** `prisma/schema.prisma`, `src/library/watched.controller.ts`, `src/library/library.service.ts`, `src/library/library.service.spec.ts`, `test/watched.e2e-spec.ts`
 **Scope:** M
 
-### Task 17: Member posts/replaces a Review; Community Rating stays correct
+### Task 17: Member posts/replaces a Review; Community Rating stays correct ✅
 **Description:** `Review` model; `PUT /movies/:id/review` upsert inside one interactive transaction: lock the Movie row, upsert the Review, recompute `reviewCount`/`ratingAvg`, call `markWatched`. Write ADR 0001 if approved.
 
 **Acceptance criteria:**
-- [ ] Two PUTs → one Review with the second Score; `GET /movies/:id` shows the updated `communityRating`
-- [ ] Scores 0, 11, 7.5 → 400; the Movie then appears in `/me/watched`
-- [ ] Concurrency test: two Members PUT at once via `Promise.all` → `count = 2`, correct average
+- [x] Two PUTs → one Review with the second Score; `GET /movies/:id` shows the updated `communityRating`
+- [x] Scores 0, 11, 7.5 → 400; the Movie then appears in `/me/watched`
+- [x] Concurrency test: two Members PUT at once via `Promise.all` → `count = 2`, correct average
 
 **Verification:** `pnpm test:e2e -- reviews`; `pnpm test -- reviews` (unit test for average/rounding maths)
 **Dependencies:** 16
 **Files:** `prisma/schema.prisma`, `src/reviews/reviews.controller.ts`, `src/reviews/reviews.service.ts`, `src/reviews/reviews.repository.ts`, `test/reviews.e2e-spec.ts`
 **Scope:** M (highest risk in the plan)
 
-### Task 18: Read Reviews; delete own; list own
+### Task 18: Read Reviews; delete own; list own ✅
 **Description:** `GET /movies/:id/reviews` (public, newest first, author `{ id, displayName }`), `DELETE /movies/:id/review` (same transaction + recompute), `GET /me/reviews`.
 
 **Acceptance criteria:**
-- [ ] Create → replace → delete leaves `communityRating` correct at each step, ending at `null`; Watched stays
-- [ ] No response contains an email; DELETE with no own Review → 404
+- [x] Create → replace → delete leaves `communityRating` correct at each step, ending at `null`; Watched stays
+- [x] No response contains an email; DELETE with no own Review → 404
 
 **Verification:** `pnpm test:e2e -- reviews`
 **Dependencies:** 17
 **Files:** `src/reviews/reviews.controller.ts`, `src/reviews/reviews.service.ts`, `src/reviews/reviews.repository.ts`, `src/reviews/me-reviews.controller.ts`, `test/reviews.e2e-spec.ts`
 **Scope:** M
 
-### Task 19: `GET /me/movies/:movieId`
+### Task 19: `GET /me/movies/:movieId` ✅
 **Description:** One endpoint returning `{ inWatchlist, watched, myReview }` for the caller.
 
 **Acceptance criteria:**
-- [ ] Correct for all combinations (none, watchlist only, watched only, reviewed); unknown Movie → 404; no token → 401
+- [x] Correct for all combinations (none, watchlist only, watched only, reviewed); unknown Movie → 404; no token → 401
 
 **Verification:** `pnpm test:e2e -- me-movie`
 **Dependencies:** 18
@@ -263,14 +263,14 @@ Plan: [plan.md](./plan.md). Every task: `pnpm lint && pnpm test && pnpm test:e2e
 **Scope:** S
 
 ### Checkpoint E: reviews + library
-- [ ] All SPEC-reviews and SPEC-library success criteria tested and green
+- [x] All SPEC-reviews and SPEC-library success criteria tested and green
 
-### Task 20: Seed Members and Reviews; prove rating sort end to end
+### Task 20: Seed Members and Reviews; prove rating sort end to end ✅
 **Description:** Seed 3 Members and ~20 Reviews across the 12 Movies (some with empty Comments, at least 2 Movies with none), computing ratings with the same function as the service; one e2e test that sorts real reviewed data by rating.
 
 **Acceptance criteria:**
-- [ ] After seeding, `GET /movies?sort=rating&order=desc` lists rated Movies by average, unrated ones last
-- [ ] Seeded ratings match what the service would compute
+- [x] After seeding, `GET /movies?sort=rating&order=desc` lists rated Movies by average, unrated ones last
+- [x] Seeded ratings match what the service would compute
 
 **Verification:** `pnpm prisma db seed`; `curl` the sort; `pnpm test:e2e`
 **Dependencies:** 14, 18
@@ -278,6 +278,6 @@ Plan: [plan.md](./plan.md). Every task: `pnpm lint && pnpm test && pnpm test:e2e
 **Scope:** S
 
 ### Checkpoint F: V1 complete
-- [ ] Every success criterion in all four specs maps to a passing test
+- [x] Every success criterion in all four specs maps to a passing test
 - [ ] README steps work from a clean clone
 - [ ] Review with Palm; next: V2 delta spec for Swagger

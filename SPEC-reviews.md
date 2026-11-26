@@ -55,13 +55,13 @@ This module also owns `Movie.ratingAvg` and `Movie.reviewCount` (declared in the
 
 ## Success Criteria
 
-- [ ] PUT twice on the same Movie leaves exactly one Review, holding the second Score
-- [ ] Scores 0, 11 and 7.5 are rejected with 400
-- [ ] After create → replace → delete, `GET /movies/:id` shows the right `communityRating` at each step, ending at `null`
-- [ ] Two Members PUTting Reviews on the same Movie concurrently leaves `reviewCount = 2` and the correct average (e2e test with `Promise.all`)
-- [ ] Posting a Review makes the Movie appear in `GET /me/watched`
-- [ ] Review lists never contain an email address
-- [ ] PUT/DELETE/`/me/reviews` without a token → 401; on an unknown Movie → 404
+- [x] PUT twice on the same Movie leaves exactly one Review, holding the second Score
+- [x] Scores 0, 11 and 7.5 are rejected with 400
+- [x] After create → replace → delete, `GET /movies/:id` shows the right `communityRating` at each step, ending at `null`
+- [x] Two Members PUTting Reviews on the same Movie concurrently leaves `reviewCount = 2` and the correct average (e2e test with `Promise.all`)
+- [x] Posting a Review makes the Movie appear in `GET /me/watched`
+- [x] Review lists never contain an email address
+- [x] PUT/DELETE/`/me/reviews` without a token → 401; on an unknown Movie → 404
 
 ## Out of Scope
 

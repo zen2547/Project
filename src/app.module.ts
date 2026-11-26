@@ -6,15 +6,18 @@ import { PrismaModule } from './prisma/prisma.module.js';
 import { GlobalExceptionFilter } from './common/global-exception.filter.js';
 import { IdentityModule } from './identity/identity.module.js';
 import { CatalogueModule } from './catalogue/catalogue.module.js';
+import { LibraryModule } from './library/library.module.js';
+import { ReviewsModule } from './reviews/reviews.module.js';
 
-// Feature modules (reviews, library) are added task by task.
-// See tasks/todo.md.
+// identity → catalogue → library → reviews (CAPABILITY-MAP.md).
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, validationSchema: envSchema }),
     PrismaModule,
     IdentityModule,
     CatalogueModule,
+    LibraryModule,
+    ReviewsModule,
   ],
   providers: [{ provide: APP_FILTER, useClass: GlobalExceptionFilter }],
 })

@@ -25,7 +25,7 @@ Build the V1 backend in `C:\Dev Nest\Imdb-web` as a fresh NestJS 12 + Prisma 7 +
 - [x] Task 3: E2E test harness against `imdb_test`
 
 ### Checkpoint A: Foundation
-- [ ] `pnpm build`, `pnpm lint`, `pnpm test`, `pnpm test:e2e` all green
+- [x] `pnpm build`, `pnpm lint`, `pnpm test`, `pnpm test:e2e` all green
 - [ ] Creating `imdb_dev`/`imdb_test` + `pnpm prisma migrate dev` work from a clean clone by following the README
 
 ### Phase 2: identity
@@ -57,19 +57,19 @@ Build the V1 backend in `C:\Dev Nest\Imdb-web` as a fresh NestJS 12 + Prisma 7 +
 - [ ] **Review with Palm** before moving on
 
 ### Phase 4: library + reviews
-- [ ] Task 15: Member keeps a Watchlist
-- [ ] Task 16: Member marks Movies Watched
-- [ ] Task 17: Member posts/replaces a Review; Community Rating stays correct under concurrency
-- [ ] Task 18: Anyone reads Reviews; Member deletes own Review and lists own Reviews
-- [ ] Task 19: `GET /me/movies/:movieId` personal state
+- [x] Task 15: Member keeps a Watchlist
+- [x] Task 16: Member marks Movies Watched
+- [x] Task 17: Member posts/replaces a Review; Community Rating stays correct under concurrency
+- [x] Task 18: Anyone reads Reviews; Member deletes own Review and lists own Reviews
+- [x] Task 19: `GET /me/movies/:movieId` personal state
 
 ### Checkpoint E: reviews + library
-- [ ] Every SPEC-reviews and SPEC-library success criterion has a passing test
+- [x] Every SPEC-reviews and SPEC-library success criterion has a passing test
 
-- [ ] Task 20: Seed Members and Reviews; prove `sort=rating` end to end
+- [x] Task 20: Seed Members and Reviews; prove `sort=rating` end to end
 
 ### Checkpoint F: V1 complete
-- [ ] Every success criterion in all four specs maps to a passing test
+- [x] Every success criterion in all four specs maps to a passing test
 - [ ] Fresh clone → create databases → migrate → seed → start works by following the README
 - [ ] **Review with Palm**; then plan V2 (Swagger first)
 

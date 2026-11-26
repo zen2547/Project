@@ -2,6 +2,14 @@ import request from 'supertest';
 import { closeTestApp, createTestApp, TestContext } from './helpers/app.js';
 import { seedCatalogue } from '../prisma/seed/catalogue.js';
 import { SEED_MOVIES } from '../prisma/seed-data/movies.js';
+import { seedMembersAndReviews } from '../prisma/seed/reviews.js';
+import {
+  SEED_MEMBERS,
+  SEED_MEMBER_PASSWORD,
+  SEED_REVIEWS,
+} from '../prisma/seed-data/reviews.js';
+import { ratingFromScores } from '../src/reviews/community-rating.js';
+import { bearer } from './helpers/auth.js';
 
 type ListRow = { id: number; title: string };
 
@@ -58,7 +66,7 @@ describe('seed: catalogue (e2e)', () => {
       expect(page.streamingLinks.length, why).toBeGreaterThanOrEqual(1);
       expect(page.posterUrl, why).toBeNull(); // no hot-linked images
       expect(page.photos, why).toEqual([]);
-      expect(page.communityRating, why).toBeNull(); // Reviews come in Task 20
+      expect(page.communityRating, why).toBeNull(); // this suite seeds no Reviews
     }
   });
 
@@ -112,5 +120,109 @@ describe('seed: catalogue (e2e)', () => {
       expect(movie.runtimeMinutes).toBeGreaterThanOrEqual(1);
       expect(movie.runtimeMinutes).toBeLessThanOrEqual(600);
     }
+  });
+});
+
+type RatedRow = ListRow & {
+  communityRating: { average: number; count: number } | null;
+};
+
+// Task 20 — SPEC-reviews.md → Seed: 3 Members, ~20 Reviews, and the
+// rating sort proven on real reviewed data.
+describe('seed: Members and Reviews (e2e)', () => {
+  let ctx: TestContext;
+
+  beforeAll(async () => {
+    ctx = await createTestApp();
+    await seedCatalogue(ctx.prisma);
+    // Twice: Members are upserted and their Reviews replaced, not doubled.
+    await seedMembersAndReviews(ctx.prisma);
+    await seedMembersAndReviews(ctx.prisma);
+  });
+
+  afterAll(async () => {
+    await closeTestApp(ctx);
+  });
+
+  const login = async (email: string) =>
+    (
+      await request(ctx.http)
+        .post('/auth/login')
+        .send({ email, password: SEED_MEMBER_PASSWORD })
+        .expect(200)
+    ).body.accessToken as string;
+
+  it('3 Members can sign in; there are exactly 20 Reviews', async () => {
+    for (const { email } of SEED_MEMBERS) await login(email);
+    expect(await ctx.prisma.review.count()).toBe(SEED_REVIEWS.length);
+  });
+
+  it('sort=rating desc: rated Movies by average, then the 2 unrated ones', async () => {
+    const res = await request(ctx.http)
+      .get('/movies?sort=rating&order=desc&limit=50')
+      .expect(200);
+    const rows = res.body.data as RatedRow[];
+
+    const rated = rows.filter((r) => r.communityRating !== null);
+    const averages = rated.map((r) => r.communityRating?.average ?? 0);
+    expect(averages).toEqual([...averages].sort((a, b) => b - a));
+
+    // unrated come last, after every rated one
+    expect(
+      rows
+        .slice(rated.length)
+        .map((r) => r.title)
+        .sort(),
+    ).toEqual(['Fight Club', 'Your Name']);
+  });
+
+  it('every stored rating equals what the service maths gives', async () => {
+    const res = await request(ctx.http).get('/movies?limit=50').expect(200);
+
+    for (const row of res.body.data as RatedRow[]) {
+      const scores = SEED_REVIEWS.filter((r) => r.movie === row.title).map(
+        (r) => r.score,
+      );
+      const expected = ratingFromScores(scores);
+      expect(row.communityRating, row.title).toEqual(
+        expected.ratingAvg === null
+          ? null
+          : { average: expected.ratingAvg, count: expected.reviewCount },
+      );
+    }
+  });
+
+  it('re-PUTting a seeded Review with the same Score through the API changes nothing', async () => {
+    const review = SEED_REVIEWS.find(
+      (r) => r.movie === 'Inception' && r.by === 'Mai',
+    );
+    const member = SEED_MEMBERS.find((m) => m.displayName === 'Mai');
+    if (!review || !member) throw new Error('seed data changed');
+    const found = await request(ctx.http)
+      .get('/movies?q=inception')
+      .expect(200);
+    const movieId = found.body.data[0].id as number;
+    const before = found.body.data[0].communityRating;
+
+    await request(ctx.http)
+      .put(`/movies/${movieId}/review`)
+      .set(bearer(await login(member.email)))
+      .send({ score: review.score, comment: review.comment })
+      .expect(200);
+
+    const after = await request(ctx.http).get(`/movies/${movieId}`).expect(200);
+    expect(after.body.communityRating).toEqual(before);
+  });
+
+  it('empty seed Comments are stored as null, and reviewers have the Movie on Watched', async () => {
+    expect(await ctx.prisma.review.count({ where: { comment: '' } })).toBe(0);
+
+    const token = await login('nina@imdb.local');
+    const watched = await request(ctx.http)
+      .get('/me/watched?limit=50')
+      .set(bearer(token))
+      .expect(200);
+    const ninasMovies = SEED_REVIEWS.filter((r) => r.by === 'Nina').length;
+    expect(watched.body.meta.total).toBe(ninasMovies);
   });
 });

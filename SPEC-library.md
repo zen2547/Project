@@ -51,10 +51,10 @@ model WatchedEntry {
 
 ## Success Criteria
 
-- [ ] Add → list → remove works for both lists; the second identical PUT/DELETE still returns 204
-- [ ] One Member never sees another Member's lists
-- [ ] `GET /me/movies/:id` reflects the Watchlist, Watched and Review state correctly in all combinations
-- [ ] All routes return 401 without a token; unknown Movie → 404
+- [x] Add → list → remove works for both lists; the second identical PUT/DELETE still returns 204
+- [x] One Member never sees another Member's lists
+- [x] `GET /me/movies/:id` reflects the Watchlist, Watched and Review state correctly in all combinations
+- [x] All routes return 401 without a token; unknown Movie → 404
 
 ## Out of Scope
 
