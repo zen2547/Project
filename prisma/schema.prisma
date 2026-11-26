@@ -1,0 +1,28 @@
+// Models are added slice by slice — see tasks/todo.md.
+// Each task adds only the models it needs, in its own migration.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/prisma/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── identity ────────────────────────────────────────────────────────────────
+
+enum Role {
+  MEMBER
+  ADMIN
+}
+
+// Glossary word: Member (or Admin). Code keeps the conventional name `User`.
+model User {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique // stored trimmed + lower-cased
+  passwordHash String
+  displayName  String
+  role         Role     @default(MEMBER)
+  createdAt    DateTime @default(now())
+}
